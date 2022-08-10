@@ -37,8 +37,8 @@ function login(e) {
         .then(response => {
             console.log(response.data);
             if (response.status === 200) {
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('userId', response.data.userId);
+                document.cookie=`token=${response.data.token}`;
+                window.location.href='../chat/index.html'
             } else {
                 throw new Error('something went wrong');
             }
