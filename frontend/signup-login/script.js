@@ -27,3 +27,18 @@ function signup(e) {
     });
 }
 
+function login(e) {
+    e.preventDefault();
+    const obj = {
+        email: email.value,
+        password: password.value
+    };
+    axios.post('http://localhost:3000/admin/login', obj)
+    .then(response=>{
+        if (response.status === 200) {
+            
+        }
+    }).catch(err=>{
+        
+    })
+}
