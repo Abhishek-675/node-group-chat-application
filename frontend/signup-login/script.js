@@ -18,12 +18,12 @@ function signup(e) {
         console.log(response.data);
         if (response.status === 201) {
             alert('Successfully signed up');
-        } else if (response.status === 403) {
+        }
+    }).catch(err=>{
+        console.log(err.response.data);
+        if (err.response.status === 403) {
             alert('email already exits');
-        } 
-    }).catch(err=>showError(err));
+        }
+    });
 }
 
-function showError(err) {
-    document.body.innerHTML += `<div style:'color:red;'>${err}</div>`;
-}
