@@ -14,17 +14,17 @@ function signup(e) {
         password: password.value
     };
     axios.post('http://localhost:3000/admin/signup', obj)
-    .then((response)=>{
-        console.log(response.data);
-        if (response.status === 201) {
-            alert('Successfully signed up');
-        }
-    }).catch(err=>{
-        console.log(err.response.data);
-        if (err.response.status === 403) {
-            alert('email already exits');
-        }
-    });
+        .then((response) => {
+            console.log(response.data);
+            if (response.status === 201) {
+                alert('Successfully signed up');
+            }
+        }).catch(err => {
+            console.log(err.response.data);
+            if (err.response.status === 403) {
+                alert('email already exits');
+            }
+        });
 }
 
 function login(e) {
@@ -34,11 +34,21 @@ function login(e) {
         password: password.value
     };
     axios.post('http://localhost:3000/admin/login', obj)
-    .then(response=>{
-        if (response.status === 200) {
-            
-        }
-    }).catch(err=>{
-        
-    })
+        .then(response => {
+            console.log(response.data);
+            if (response.status === 200) {
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userId', response.data.userId);
+            } else {
+                throw new Error('something went wrong');
+            }
+        }).catch(err => {
+            console.log(err.response.data);
+            if (err.response.status === 401) {
+                alert('password do not match, login again');
+            }
+            else if (err.response.status === 404) {
+                alert('user does not exit. Please signup');
+            }
+        })
 }
