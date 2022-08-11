@@ -12,11 +12,8 @@
 <body>
     <div>
         <h1>Chat App</h1>
-        <div id="message-container">
-            <div>Hi</div>
-            <div>Hello</div>
-        </div>
-        <form id="send-conatiner">
+        <div id="message-container"></div>
+        <form onsubmit="sendMsg(event)" id="send-conatiner">
             <input type="text" id="message-input">
             <button type="submit" id="send-btn">Send</button>
         </form>

@@ -10,9 +10,9 @@ function generateAccessToken(id) {
 exports.signup = (req, res) => {
     const { name, email, phone, password } = req.body;
 
-    User.findOne({ where: { email: req.body.email } }).then(() => {
-        res.status(403).json({ success: false, message: 'email already exits' });
-    })
+    // User.findOne({ where: { email: req.body.email } }).then(() => {
+    //     res.status(403).json({ success: false, message: 'email already exits' });
+    // })
 
     const saltRounds = 10;
     bycrypt.genSalt(saltRounds, function (err, salt) {
@@ -27,6 +27,7 @@ exports.signup = (req, res) => {
                 })
                 .catch((err) => {
                     console.log(err);
+                    res.status(403).json({success:false,message:'email already exists'});
                 })
         })
     });
@@ -45,7 +46,7 @@ exports.login = (req, res) => {
                     if (response) {
                         console.log(JSON.stringify(user));
                         const jwtToken = generateAccessToken(user[0].id);
-                        res.status(200).json({ token: jwtToken,userId:user[0].id, success: true, message: 'successfully logged in' });
+                        res.status(200).json({ token: jwtToken,userId:user[0].id,name:user[0].name, success: true, message: 'successfully logged in' });
                     }
                     else {
                         return res.status(401).json({ success: false, message: 'password do not match' });

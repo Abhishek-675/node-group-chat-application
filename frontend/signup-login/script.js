@@ -18,12 +18,14 @@ function signup(e) {
             console.log(response.data);
             if (response.status === 201) {
                 alert('Successfully signed up');
+                window.location.href='./login.html'
             }
         }).catch(err => {
-            console.log(err.response.data);
-            if (err.response.status === 403) {
-                alert('email already exits');
-            }
+            console.log(err);
+            // console.log(err.response.data);
+            // if (err.response.status === 403) {
+            //     alert('email already exits');
+            // }
         });
 }
 
@@ -37,18 +39,22 @@ function login(e) {
         .then(response => {
             console.log(response.data);
             if (response.status === 200) {
-                document.cookie=`token=${response.data.token}`;
+                // document.cookie=`token=${response.data.token}`;
+                localStorage.setItem('token',response.data.token);
+                localStorage.setItem('name',response.data.name);
+                localStorage.setItem('userId',response.data.userId);
                 window.location.href='../chat/index.html'
             } else {
                 throw new Error('something went wrong');
             }
         }).catch(err => {
-            console.log(err.response.data);
-            if (err.response.status === 401) {
-                alert('password do not match, login again');
-            }
-            else if (err.response.status === 404) {
-                alert('user does not exit. Please signup');
-            }
+            console.log(err);
+            // console.log(err.response.data);
+            // if (err.response.status === 401) {
+            //     alert('password do not match, login again');
+            // }
+            // else if (err.response.status === 404) {
+            //     alert('user does not exit. Please signup');
+            // }
         })
 }
