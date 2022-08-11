@@ -1,3 +1,5 @@
+const {Op}=require('sequelize');
+
 const User=require('../models/user');
 const Chat = require('../models/chat');
 
@@ -15,7 +17,8 @@ exports.chat=(req,res)=>{
 }
 
 exports.getChats=(req,res)=>{
-    Chat.findAll()
+    const LastId=req.query.id
+    Chat.findAll({where:{id:{[Op.gt]:LastId}}})
     .then((chat)=>{
         res.status(200).json({chat:chat});
     }).catch(err=>console.log(err));
