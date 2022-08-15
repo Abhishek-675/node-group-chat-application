@@ -10,13 +10,43 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div>
+    <div class="chat-box-container">
         <h1>Chat App</h1>
         <div id="message-container"></div>
-        <form action="" onsubmit="sendMsg(event)" id="send-conatiner">
-            <input type="text" id="message-input" required>
+        <form action="" onsubmit="sendMsg(event)" id="send-container">
+            <input type="text" id="message-input" placeholder="Enter your message" required>
             <button type="submit" id="send-btn">Send</button>
         </form>
+    </div>
+    <div class="group-chat-container">
+        <h2>Group Chat</h2>
+        <div id="group-chat-receive-box"></div>
+        <form action="" onsubmit="sendGroupMsg(event)" id="group-chat-form">
+            <input type="text" id="group-chat-input" placeholder="Type your message" required>
+            <select name="group-id-select" id="group-id-select">
+                <option value="">--select group--</option>
+            </select>
+            <button type="submit" id="send-btn-group">Send</button>
+        </form>
+        <form action="" onsubmit="getGroupChat(event)" style="padding: 10px 0;">
+            <input type="number" id="group-chat-input-get" placeholder="Enter Group Id" required>
+            <button type="submit" id="enter-group-chat">Get Chats</button>
+        </form>
+        <form onsubmit="createGroup(event)" class="create-group">
+            <input type="text" id="create-group-input" class="create-group-input" placeholder="Enter group name" required>
+            <button type="submit" class="create-group-btn">Create</button>
+        </form>
+        <form onsubmit="addUserToGroup(event)" style="padding: 10px 0;">
+            <input type="email" id="add-user-input" placeholder="Enter email" required>
+            <input type="number" id="add-group-id" placeholder="Enter group id" required>
+            <button type="submit" id="add-user-group-btn">Add user to group</button>
+        </form>
+    </div>
+    <div class="group-user-container">
+        <h2>Group List</h2>
+        <div id="group-list" class="group-list"><ul></ul></div>
+        <h2>User List</h2>
+        <div id="user-list" class="user-list"><ul></ul></div>
     </div>
 </body>
 </html>

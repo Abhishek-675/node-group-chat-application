@@ -2,9 +2,16 @@ const express = require('express');
 
 const chatRoutes=express.Router();
 
+const authMiddleware=require('../auth/auth');
+
 const chatController=require('../controllers/chat');
 
-chatRoutes.post('/chat', chatController.chat);
-chatRoutes.get('/', chatController.getChats);
+chatRoutes.post('/chat',authMiddleware.verifyToken, chatController.postChat);
+
+chatRoutes.get('/',authMiddleware.verifyToken,chatController.getChats);
+
+//group
+chatRoutes.get('/get-groupchat',authMiddleware.verifyToken,chatController.getGroupChats);
+
 
 module.exports=chatRoutes;
