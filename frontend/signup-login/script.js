@@ -43,7 +43,7 @@ function login(e) {
                 localStorage.setItem('name',response.data.name);
                 localStorage.setItem('userId',response.data.userId);
                 localStorage.setItem('localMsg', '[]');
-                window.location.href='../chat/index.html'
+                window.location.href='./chat.html'
             } 
         }).catch(error => {
             console.log(error);

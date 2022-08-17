@@ -10,8 +10,4 @@ chatRoutes.post('/chat',authMiddleware.verifyToken, chatController.postChat);
 
 chatRoutes.get('/',authMiddleware.verifyToken,chatController.getChats);
 
-//group
-chatRoutes.get('/get-groupchat',authMiddleware.verifyToken,chatController.getGroupChats);
-
-
 module.exports=chatRoutes;

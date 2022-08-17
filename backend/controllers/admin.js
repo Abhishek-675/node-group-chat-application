@@ -2,7 +2,6 @@ const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
-const Group=require('../models/group');
 
 function generateAccessToken(id) {
     return jwt.sign(id, process.env.TOKEN_SECRET);
@@ -38,7 +37,7 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
     const { email, password } = req.body;
 
-    User.findAll({ where: { email: req.body.email } })
+    User.findAll({ where: { email: email } })
         .then(user => {
             if (user.length > 0) {
                 bycrypt.compare(password, user[0].password, function (err, response) {
@@ -62,13 +61,5 @@ exports.login = (req, res) => {
         })
 }
 
-exports.getUsers = async (req,res) => {
-    try {
-        const user = await User.findAll({attributes:['id','name','email']});
-        res.status(200).json({success:true,user});
-    } catch (err) {
-        console.log(err);
-        res.status(401).json({success:false, message: 'error' });
-    }
-}
+
 
