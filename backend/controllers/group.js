@@ -31,8 +31,13 @@ exports.deleteGroup=async (req,res)=>{
             return res.status(400).json({message:"You are not an admin"});
         }
 
+        const chats= await Chat.findAll({attributes:['id'],where:{groupId:gId}});
+        let array=[];
+        chats.forEach(chat=>{
+            array.push(chat.id);
+        })
+        await Chat.destroy({where:{id:array}});
         await Group.destroy({where:{id:gId}});
-        await Chat.destroy({where:{groupId:gId, userId:req.user.id}});
         res.status(200).json({message:'successfully deleted'});
     }catch(err){
         console.log(err);

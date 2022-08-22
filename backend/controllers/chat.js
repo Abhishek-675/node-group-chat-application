@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
-const chatRoutes = require('../routes/chat');
 
-// const User = require('../models/user');
+const S3Service= require('../services/S3service');
+
 const Chat = require('../models/chat');
 
 exports.postChat = (req, res) => {
@@ -25,5 +25,18 @@ exports.getChats = async (req, res) => {
         res.status(200).json({ success: true, chat });
     } catch (err) {
         console.log(err)
+    }
+}
+
+exports.uploadFile= async(req, res)=>{
+    try{
+        console.log(req.file)
+        const filename= `user-${req.user.id}/${req.file.filename}_${new Date()}.png`;
+        // console.log(filename)
+        const fileURL= await S3Service.uploadToS3(req.file.path, filename);
+        res.status(200).json({success: true, fileURL});
+    }catch(err){
+        console.log(err);
+        res.status(500).json(err);
     }
 }

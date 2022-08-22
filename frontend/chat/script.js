@@ -100,7 +100,7 @@ const authAxios = axios.create({
             <span>${user.name}</span>
             <span>${user.email}</span>
             <label for="accept">Admin</label>
-            <input type="checkbox" name="accept" id="accept">
+            <input type="checkbox" id="accept">
             <button id="add-user-btn" class="user-btn">Add</button>
             <button id="remove-user-btn" class="user-btn">Remove</button>
             </li> `;
@@ -174,7 +174,7 @@ const authAxios = axios.create({
 
     if (localStorage.getItem('groupId') != null) {
         // setInterval(() => {
-        authAxios.get(`/?id=${lastId}&gId=${groupId}`)
+        authAxios.get(`/get-chats?id=${lastId}&gId=${groupId}`)
             .then(response => {
                 // console.log('>>>backend<<<', response.data.chat);
                 // console.log('>>>local<<<', localMsg);
@@ -189,9 +189,9 @@ const authAxios = axios.create({
                 const div = document.getElementById('group-chat-receive-box');
                 div.innerHTML = '';
                 retrivedMsg.forEach(chat => {
-                    div.innerHTML += `<div id="${chat.id}>">${chat.name}:${chat.message}</div>`;
+                    div.innerHTML += `<div id="${chat.id}>"><span style="color:green;"><b>${chat.name}:</b></span><span>${chat.message}</span></div>`;
                     });
-                }).catch(err=>console.log(err.response.data))
+                }).catch(err=>console.log(err.response))
         // }, 1000)
     }
     
@@ -206,13 +206,35 @@ const authAxios = axios.create({
             const obj = {
                 message: input,
                 name: name,
-                groupId: localStorage.getItem('groupId')
+                groupId: localStorage.getItem('groupId'),
             }
             console.log(obj);
-            authAxios.post('/chat', obj).then(res=>console.log(res)).catch(err=>console.log(err))
+            authAxios.post('/post-chat', obj).then(res=>console.log(res)).catch(err=>console.log(err))
             document.getElementById('group-chat-input').value = '';
             document.getElementById('group-chat-receive-box').innerHTML += `
-                <div>${name}:${input}</div>`;
+                <div><span style="color:green;"><b>${name}:</b></span><span>${input}</span></div>`;
         }        
     }
+}
+
+function sendFile(event){
+    event.preventDefault();
+    const fileInput= document.getElementById('file-upload');
+    const formData= new FormData();
+    // console.log(fileInput.files);
+    formData.append('image',fileInput.files[0]);
+    // console.log(formData)
+
+    authAxios.post('/upload', formData).then(res=>{
+        console.log(res);
+        if(res.status === 200){
+            let a = document.createElement('a');
+            a.href= res.data.fileURL;
+            a.download= 'file';
+            a.click();
+        }
+    }).catch(err=>{
+        console.log(err.response)
+    })
+
 }
