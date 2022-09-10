@@ -1,4 +1,4 @@
-const {Op}= require('sequelize');
+const {Op, where}= require('sequelize');
 
 const Group = require('../models/group');
 const User = require('../models/user');
@@ -67,9 +67,9 @@ exports.getUsers = async (req,res) => {
                 userIdArray.push(id.userId);
             })
             // console.log(userIdArray);
-            const userData= await User.findAll({attributes:['id','name','email'],where:{id:userIdArray}});
+            const userData= await User.findAll({attributes:['id','name','email'],include:[{model:Group, where:{id:gId}}],where:{id:userIdArray}});
             // console.log(userData);
-            res.json(userData)
+            res.status(200).json({userData})
         }else if(gId == null){
             const user = await User.findAll({attributes:['id','name','email'],where:{id:{[Op.ne]:req.user.id}}});
             // console.log(user)
@@ -111,6 +111,7 @@ exports.addUserToGroup = async(req, res) => {
 exports.removeUser = async(req,res)=>{
     try{
         const { groupId, email } = req.body;
+        console.log(req.body)
 
         //for checking current user if admin
         const adminCheck= await UserGroup.findOne({where:{userId:req.user.id,groupId:groupId}});
@@ -120,13 +121,27 @@ exports.removeUser = async(req,res)=>{
         }
 
         const userToRemove=await User.findOne({ where: { email } })
+        // console.log(userToRemove)
         const result= await UserGroup.destroy({where:{userId:userToRemove.id,groupId:groupId}});
-        console.log('>>>>>>',result)
+        // console.log('>>>>>>',result)
         if(result==0) return res.status(404).json({message:'User not present in the group'});
         res.status(200).json({message:'User removed from the group'});
         
     }catch(err){
         console.log(err);
         res.sendStatus(500);
+    }
+}
+
+exports.makeAdmin=async(req,res)=>{
+    try{
+        const {email, groupId}= req.body;
+        const user= await User.findOne({where:{email:email}});
+        await await UserGroup.update({isAdmin:true},{where:{userId:user.id,groupId:groupId}});
+        res.status(200).json({message:"user is now admin"})
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({message:err});
     }
 }

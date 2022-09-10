@@ -15,6 +15,8 @@ groupRoutes.get('/get-users', authMiddleware.verifyToken,groupController.getUser
 
 groupRoutes.post('/add-user',authMiddleware.verifyToken,groupController.addUserToGroup);
 
+groupRoutes.post('/make-admin', authMiddleware.verifyToken, groupController.makeAdmin);
+
 groupRoutes.post('/remove-user', authMiddleware.verifyToken, groupController.removeUser);
 
 module.exports=groupRoutes;
